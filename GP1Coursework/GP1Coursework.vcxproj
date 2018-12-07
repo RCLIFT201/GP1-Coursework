@@ -158,6 +158,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cFontMgr.h" />
     <ClInclude Include="cGame.h" />
+    <ClInclude Include="cHighScoreTable.h" />
     <ClInclude Include="cRocket.h" />
     <ClInclude Include="cSDL2WNDManager.h" />
     <ClInclude Include="cSound.h" />
@@ -177,6 +178,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="cFont.cpp" />
     <ClCompile Include="cFontMgr.cpp" />
     <ClCompile Include="cGameStuVer.cpp" />
+    <ClCompile Include="cHighScoreTable.cpp" />
     <ClCompile Include="cRocket.cpp" />
     <ClCompile Include="cSDL2WNDManager.cpp" />
     <ClCompile Include="cSound.cpp" />
@@ -184,6 +186,16 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="cSprite.cpp" />
     <ClCompile Include="cTexture.cpp" />
     <ClCompile Include="cTextureMgr.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Buttons\hs_button.png" />
+    <Image Include="Buttons\play_button.png" />
+    <Image Include="Buttons\quit_button.png" />
+    <Image Include="Images\Bkg\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\HighScore.dat" />
+    <None Include="Data\HighScore2.dat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -66,6 +66,9 @@
     <ClInclude Include="GameConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cHighScoreTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsteroidsSDL.cpp">
@@ -116,5 +119,26 @@
     <ClCompile Include="cTextureMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cHighScoreTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Buttons\play_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Buttons\hs_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Buttons\quit_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Bkg\Background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\HighScore.dat" />
+    <None Include="Data\HighScore2.dat" />
   </ItemGroup>
 </Project>

@@ -47,7 +47,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	/* Let the computer pick a random number */
 	random_device rd;    // non-deterministic engine 
 	mt19937 gen{ rd() }; // deterministic engine. For most common uses, std::mersenne_twister_engine, fast and high-quality.
-	uniform_int_distribution<> AsteroidDis{ 0, 5 };
+	uniform_int_distribution<> AsteroidDis{ 0, 10 };
 	uniform_int_distribution<> AsteroidTextDis{ 0, 0 };
 
 	theTextureMgr->setRenderer(theRenderer);
@@ -57,16 +57,16 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	theAreaClicked = { 0, 0 };
 	// Store the textures
-	textureName = { "Enemy", "bullet_clipart", "theBackground", "explosion", "Tank", "MainMenuBackground", "GameOverBackground" };
-	texturesToUse = { "Images\\Sprites\\Enemy.png", "Images\\Sprites\\Bullet_ClipArt.png", "Images\\Sprites\\Background.png", "Images\\Sprites\\explosion.png", "Images\\Sprites\\Tank.png", "Images\\Bkg\\MainMenuBackground.png", "Images\\Bkg\\GameOverBackground.jpg" };
+	textureName = { "Enemy", "bullet_clipart", "explosion", "Tank", "MainMenuBackground", };
+	texturesToUse = { "Images\\Sprites\\Enemy.png", "Images\\Sprites\\Bullet_ClipArt.png", "Images\\Sprites\\explosion.png", "Images\\Sprites\\Tank.png", "Images\\Bkg\\MainMenuBackground.png", };
 	for (int tCount = 0; tCount < (int)textureName.size(); tCount++)
 	{	
 		theTextureMgr->addTexture(textureName[tCount], texturesToUse[tCount]);
 	}
 
 	// Store the textures
-	btnNameList = { "exit_btn", "instructions_btn", "load_btn", "menu_btn", "play_btn", "save_btn", "settings_btn", "hs_btn" };
-	btnTexturesToUse = { "Images/Buttons/button_exit.png", "Images/Buttons/button_instructions.png", "Images/Buttons/button_load.png", "Images/Buttons/button_menu.png", "Images/Buttons/button_play.png", "Images/Buttons/button_save.png", "Images/Buttons/button_settings.png", "Images/Buttons/button_hscore.png" };
+	btnNameList = { "quit_button", "instructions_btn", "load_btn", "menu_btn", "play_button", "save_btn", "settings_btn", "hs_button" };
+	btnTexturesToUse = { "Buttons/quit_button.png", "Buttons/button_instructions.png", "Buttons/button_load.png", "Buttons/button_menu.png", "Buttons/play_button.png", "Buttons/button_save.png", "Buttons/button_settings.png", "Buttons/hs_button.png" };
 	btnPos = { { 400, 375 },{ 400, 300 },{ 400, 300 },{ 500, 500 },{ 400, 300 },{ 740, 500 },{ 400, 300 },{ 400, 500 } };
 	for (unsigned int bCount = 0; bCount < btnNameList.size(); bCount++)
 	{
@@ -99,7 +99,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	// Create text Textures
 	gameTextNames = { "TitleTxt", "ObjectiveTxt", "InstructTxt", "ThanksTxt", "SeeYouTxt","BottleCount","HSTable","HScore" };
-	gameTextList = { "Robot Defence", "Kill all the invading robots!", "Use the arrow keys to move left or right.", "Thanks for playing!", "See you again soon!", "Score", "", "High Score" };
+	gameTextList = { "Robot Defence", "Kill all the invading robots!", "Use the arrow keys to move left or right.", "Thanks for playing!", "See you again soon!", "Score: ", "", "High Score" };
 	for (unsigned int text = 0; text < gameTextNames.size(); text++)
 	{
 		if (text == 0 || text == gameTextNames.size() - 1)
@@ -113,9 +113,9 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	}
 
 	// Load game sounds
-	soundList = { "gameTheme", "laserShot", "explosion" };
-	soundTypes = { soundType::music, soundType::sfx, soundType::sfx };
-	soundsToUse = { "Audio/InGameTheme.wav", "Audio/laserShot.wav", "Audio/explosion2.aiff" };
+	soundList = { "gameTheme", "menuMusic", "laserShot", "explosion" };
+	soundTypes = { soundType::music, soundType::music, soundType::sfx, soundType::sfx };
+	soundsToUse = { "Audio/InGameTheme.wav", "Audio/menuMusic.wav", "Audio/laserShot.wav", "Audio/explosion2.aiff" };
 	for (int sounds = 0; sounds < (int)soundList.size(); sounds++)
 	{
 		theSoundMgr->add(soundList[sounds], soundsToUse[sounds], soundTypes[sounds]);
@@ -130,15 +130,15 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theRocket.setSpritePos({ 500, 640 });
 	theRocket.setTexture(theTextureMgr->getTexture("Tank"));
 	theRocket.setSpriteDimensions(theTextureMgr->getTexture("Tank")->getTWidth(), theTextureMgr->getTexture("Tank")->getTHeight());
-	theRocket.setRocketVelocity(100);
+	theRocket.setRocketVelocity(75);
 	theRocket.setSpriteTranslation({ 50,50 });
 
 
-	// Create vector array of textures
+	 // Create vector array of textures
 	for (int astro = 0; astro < 10; astro++)
 	{
 		theAsteroids.push_back(new cAsteroid);
-		theAsteroids[astro]->setSpritePos({ 900 * AsteroidDis(gen), 0 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
+		theAsteroids[astro]->setSpritePos({ 90 * AsteroidDis(gen), 0 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
 		theAsteroids[astro]->setSpriteTranslation({ 0, -60 }); // Moves enemies down
 		int randAsteroid = AsteroidTextDis(gen);
 		theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
@@ -146,6 +146,27 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		theAsteroids[astro]->setAsteroidVelocity(10);
 		theAsteroids[astro]->setActive(true);
 	}
+
+	robotsDestroyed = 0;
+	strScore = gameTextList[5];
+	strScore += to_string(robotsDestroyed).c_str();
+
+	numTableItems = 0;
+	theHSTable.loadFromFile("Data/HighScore.dat");
+
+	theHighScoreTable = gameTextList[6];
+
+	theHSTableSize = theHSTable.getTableSize();
+	highScoreTextures = { "score1","score2","score3","score4","score5","score6","score7","score8","score9","score10" };
+
+	for (int item = 0; item < theHSTableSize; item++)
+	{
+		string entry = "";
+		entry += theHSTable.getItem(item).Name + " " + to_string(theHSTable.getItem(item).score);
+		theTextureMgr->addTexture(highScoreTextures[item], theFontMgr->getFont("retro")->createTextTexture(theRenderer, entry.c_str(), textType::solid, { 44, 203, 112, 255 }, { 0, 0, 0, 0 }));
+	}
+
+	gameOver = false;
 }
 
 void cGame::run(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
@@ -163,46 +184,47 @@ void cGame::run(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	}
 }
 
+
 void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
 	SDL_RenderClear(theRenderer);
 	spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
-	//// Render each asteroid in the vector array
-	//for (int draw = 0; draw < (int)theAsteroids.size(); draw++)
-	//{
-	//	theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
-	//}
+	// Render each asteroid in the vector array
+	for (int draw = 0; draw < (int)theAsteroids.size(); draw++)
+	{
+		theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
+	}
 
-	//// Render each bullet in the vector array
-	//for (int draw = 0; draw < (int)theBullets.size(); draw++)
-	//{
-	//	theBullets[draw]->render(theRenderer, &theBullets[draw]->getSpriteDimensions(), &theBullets[draw]->getSpritePos(), theBullets[draw]->getSpriteRotAngle(), &theBullets[draw]->getSpriteCentre(), theBullets[draw]->getSpriteScale());
-	//}
+	// Render each bullet in the vector array
+	for (int draw = 0; draw < (int)theBullets.size(); draw++)
+	{
+		theBullets[draw]->render(theRenderer, &theBullets[draw]->getSpriteDimensions(), &theBullets[draw]->getSpritePos(), theBullets[draw]->getSpriteRotAngle(), &theBullets[draw]->getSpriteCentre(), theBullets[draw]->getSpriteScale());
+	}
 
-	//// Render each explosion in the vector array
-	//for (int draw = 0; draw < (int)theExplosions.size(); draw++)
-	//{
-	//	theExplosions[draw]->render(theRenderer, &theExplosions[draw]->getSourceRect(), &theExplosions[draw]->getSpritePos(), theExplosions[draw]->getSpriteScale());
-	//}
+	// Render each explosion in the vector array
+	for (int draw = 0; draw < (int)theExplosions.size(); draw++)
+	{
+		theExplosions[draw]->render(theRenderer, &theExplosions[draw]->getSourceRect(), &theExplosions[draw]->getSpritePos(), theExplosions[draw]->getSpriteScale());
+	}
 
-	//// Render the Title
-	//cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
-	//SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-	//FPoint scale = { 1, 1 };
-	//tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+	// Render the Title
+	cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
+	SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+	FPoint scale = { 1, 1 };
+	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
-	//// Render updated score value
-	//
-	//// Lab 7 code goes here
-	//tempTextTexture = theTextureMgr->getTexture("theScore");
-	//pos = { 700, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-	//scale = { 1, 1 };
-	//tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-	//
-	//// render the rocket
-	//theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
-	//SDL_RenderPresent(theRenderer);
+	// Render updated score value
+	
+	// Lab 7 code goes here
+	tempTextTexture = theTextureMgr->getTexture("theScore");
+	pos = { 700, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+	scale = { 1, 1 };
+	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+	
+	// render the rocket
+	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
+	SDL_RenderPresent(theRenderer);
 
 	switch (theGameState)
 	{
@@ -213,24 +235,18 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
 		// Render the Title
-		cTexture* tempTextTexture = theTextureMgr->getTexture("TitleTxt");
-		SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-		FPoint scale = { 1, 1 };
+		tempTextTexture = theTextureMgr->getTexture("TitleTxt");
+		pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		scale = { 1, 1 };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-		tempTextTexture = theTextureMgr->getTexture("ObjectiveTxt");
-		pos = { 50, 100, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-		tempTextTexture = theTextureMgr->getTexture("InstructTxt");
-		pos = { 50, 175, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-		
+
 		// Render Button
-		theButtonMgr->getBtn("play_btn")->setSpritePos({ 400, 375 });
-		theButtonMgr->getBtn("play_btn")->render(theRenderer, &theButtonMgr->getBtn("play_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("play_btn")->getSpritePos(), theButtonMgr->getBtn("play_btn")->getSpriteScale());
-		theButtonMgr->getBtn("hs_btn")->setSpritePos({ 400, 425 });
-		theButtonMgr->getBtn("hs_btn")->render(theRenderer, &theButtonMgr->getBtn("hs_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("hs_btn")->getSpritePos(), theButtonMgr->getBtn("hs_btn")->getSpriteScale());
-		theButtonMgr->getBtn("exit_btn")->setSpritePos({ 400, 475 });
-		theButtonMgr->getBtn("exit_btn")->render(theRenderer, &theButtonMgr->getBtn("exit_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("exit_btn")->getSpritePos(), theButtonMgr->getBtn("exit_btn")->getSpriteScale());
+		theButtonMgr->getBtn("play_button")->setSpritePos({ 400, 375 });
+		theButtonMgr->getBtn("play_button")->render(theRenderer, &theButtonMgr->getBtn("play_button")->getSpriteDimensions(), &theButtonMgr->getBtn("play_button")->getSpritePos(), theButtonMgr->getBtn("play_button")->getSpriteScale());
+		theButtonMgr->getBtn("hs_button")->setSpritePos({ 400, 425 });
+		theButtonMgr->getBtn("hs_button")->render(theRenderer, &theButtonMgr->getBtn("hs_button")->getSpriteDimensions(), &theButtonMgr->getBtn("hs_button")->getSpritePos(), theButtonMgr->getBtn("hs_button")->getSpriteScale());
+		theButtonMgr->getBtn("quit_button")->setSpritePos({ 400, 475 });
+		theButtonMgr->getBtn("quit_button")->render(theRenderer, &theButtonMgr->getBtn("quit_button")->getSpriteDimensions(), &theButtonMgr->getBtn("quit_button")->getSpritePos(), theButtonMgr->getBtn("quit_button")->getSpriteScale());
 	}
 	break;
 	case gameState::playing:
@@ -270,26 +286,6 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		// render the rocket
 		theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
 		SDL_RenderPresent(theRenderer);
-
-		//theRocket.setSpritePos({ 500, 640 });
-		//theRocket.setTexture(theTextureMgr->getTexture("Tank"));
-		//theRocket.setSpriteDimensions(theTextureMgr->getTexture("Tank")->getTWidth(), theTextureMgr->getTexture("Tank")->getTHeight());
-		//theRocket.setRocketVelocity(100);
-		//theRocket.setSpriteTranslation({ 50,50 });
-
-
-		//// Create vector array of textures
-		//for (int astro = 0; astro < 10; astro++)
-		//{
-		//	theAsteroids.push_back(new cAsteroid);
-		//	theAsteroids[astro]->setSpritePos({ 900 * AsteroidDis(gen), 0 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
-		//	theAsteroids[astro]->setSpriteTranslation({ 0, -60 }); // Moves enemies down
-		//	int randAsteroid = AsteroidTextDis(gen);
-		//	theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
-		//	theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
-		//	theAsteroids[astro]->setAsteroidVelocity(10);
-		//	theAsteroids[astro]->setActive(true);
-		//}
 	}
 	case gameState::end:
 	{
@@ -307,36 +303,36 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 		theButtonMgr->getBtn("menu_btn")->setSpritePos({ 500, 500 });
 		theButtonMgr->getBtn("menu_btn")->render(theRenderer, &theButtonMgr->getBtn("menu_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("menu_btn")->getSpritePos(), theButtonMgr->getBtn("menu_btn")->getSpriteScale());
-		theButtonMgr->getBtn("exit_btn")->setSpritePos({ 500, 575 });
+		theButtonMgr->getBtn("quit_button")->setSpritePos({ 500, 575 });
+		theButtonMgr->getBtn("quit_button")->render(theRenderer, &theButtonMgr->getBtn("quit_button")->getSpriteDimensions(), &theButtonMgr->getBtn("quit_button")->getSpritePos(), theButtonMgr->getBtn("quit_button")->getSpriteScale());
+	}
+	break;
+	case gameState::highscore:
+	{
+		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+		// Render the Title
+		tempTextTexture = theTextureMgr->getTexture("HScore");
+		pos = { 220, 125, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		scale = { 1, 1 };
+		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+		pos = { 220, 200, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+
+		for (int item = 0; item < theHSTableSize; item++)
+		{
+			tempTextTexture = theTextureMgr->getTexture(highScoreTextures[item]);
+			tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+			pos = { 220, 200 + (50 * item), tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		}
+
+		// Render Button
+		theButtonMgr->getBtn("play_btn")->setSpritePos({ 900, 375 });
+		theButtonMgr->getBtn("play_btn")->render(theRenderer, &theButtonMgr->getBtn("play_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("play_btn")->getSpritePos(), theButtonMgr->getBtn("play_btn")->getSpriteScale());
+		theButtonMgr->getBtn("menu_btn")->setSpritePos({ 900, 425 });
+		theButtonMgr->getBtn("menu_btn")->render(theRenderer, &theButtonMgr->getBtn("menu_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("menu_btn")->getSpritePos(), theButtonMgr->getBtn("menu_btn")->getSpriteScale());
+		theButtonMgr->getBtn("exit_btn")->setSpritePos({ 900, 475 });
 		theButtonMgr->getBtn("exit_btn")->render(theRenderer, &theButtonMgr->getBtn("exit_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("exit_btn")->getSpritePos(), theButtonMgr->getBtn("exit_btn")->getSpriteScale());
 	}
 	break;
-	//case gameState::highscore:
-	//{
-	//	spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
-	//	// Render the Title
-	//	tempTextTexture = theTextureMgr->getTexture("HScore");
-	//	pos = { 220, 125, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-	//	scale = { 1, 1 };
-	//	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-	//	pos = { 220, 200, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-
-	//	for (int item = 0; item < theHSTableSize; item++)
-	//	{
-	//		tempTextTexture = theTextureMgr->getTexture(highScoreTextures[item]);
-	//		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-	//		pos = { 220, 200 + (50 * item), tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-	//	}
-
-	//	// Render Button
-	//	theButtonMgr->getBtn("play_btn")->setSpritePos({ 900, 375 });
-	//	theButtonMgr->getBtn("play_btn")->render(theRenderer, &theButtonMgr->getBtn("play_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("play_btn")->getSpritePos(), theButtonMgr->getBtn("play_btn")->getSpriteScale());
-	//	theButtonMgr->getBtn("menu_btn")->setSpritePos({ 900, 425 });
-	//	theButtonMgr->getBtn("menu_btn")->render(theRenderer, &theButtonMgr->getBtn("menu_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("menu_btn")->getSpritePos(), theButtonMgr->getBtn("menu_btn")->getSpriteScale());
-	//	theButtonMgr->getBtn("exit_btn")->setSpritePos({ 900, 475 });
-	//	theButtonMgr->getBtn("exit_btn")->render(theRenderer, &theButtonMgr->getBtn("exit_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("exit_btn")->getSpritePos(), theButtonMgr->getBtn("exit_btn")->getSpriteScale());
-	//}
-	//break;
 	case gameState::quit:
 	{
 		loop = false;
@@ -368,73 +364,77 @@ void cGame::update(double deltaTime)
 		theRocket.setRocketMove(theRocket.getRocketMove()*(-1));
 	}
 
-	// CHeck Button clicked and change state
+	// Check Button clicked and change state
 	if (theGameState == gameState::menu || theGameState == gameState::end)
 	{
-		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, gameState::quit, theAreaClicked);
+		theGameState = theButtonMgr->getBtn("quit_button")->update(theGameState, gameState::quit, theAreaClicked);
 	}
 	else
 	{
-		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, gameState::end, theAreaClicked);
+		theGameState = theButtonMgr->getBtn("quit_button")->update(theGameState, gameState::end, theAreaClicked);
 	}
-	//if (theGameState == gameState::highscore)
-	//{
-	//	spriteBkgd.setTexture(theTextureMgr->getTexture("HScoreScreen"));
-	//	spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("HScoreScreen")->getTWidth(), theTextureMgr->getTexture("OpeningScreen")->getTHeight());
-	//	theGameState = theButtonMgr->getBtn("play_btn")->update(theGameState, gameState::playing, theAreaClicked);
-	//	theGameState = theButtonMgr->getBtn("menu_btn")->update(theGameState, gameState::menu, theAreaClicked);
-	//}
+	if (theGameState == gameState::highscore)
+	{
+		spriteBkgd.setTexture(theTextureMgr->getTexture("MainMenuBackground"));
+		spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("MainMenuBackground")->getTWidth(), theTextureMgr->getTexture("MainMenuBackground")->getTHeight());
+		theGameState = theButtonMgr->getBtn("play_button")->update(theGameState, gameState::playing, theAreaClicked);
+		theGameState = theButtonMgr->getBtn("menu_btn")->update(theGameState, gameState::menu, theAreaClicked);
+	}
 
 	if (theGameState == gameState::menu)
 	{
-		theGameState = theButtonMgr->getBtn("play_btn")->update(theGameState, gameState::playing, theAreaClicked);
-		//gameOver = false;
-		//if (theGameState == gameState::playing && gameOver == false)
-		//{
-		//	theTileMap.update(theShip.getMapPosition(), 1, 0.0f);
-		//	theTileMap.update(theBottle.getMapPosition(), 1, 0.0f);
-		//	theTileMap.update(thePirate.getMapPosition(), 1, 0.0f);
-		//	theShip.setMapPosition(spriteRandom(gen), spriteRandom(gen));
-		//	theBottle.genRandomPos(theShip.getMapPosition().R, theShip.getMapPosition().C);
-		//	// Lab Code goes here
-		//	theTileMap.update(theShip.getMapPosition(), 3, theShip.getShipRotation());
-		//	theTileMap.update(theBottle.getMapPosition(), 2, theBottle.getBottleRotation());
-		//	theTileMap.update(thePirate.getMapPosition(), 4, thePirate.getEnemyRotation());
-		//	// Lab Code goes here
-		//	bottlesCollected = 0;
-		//}
+		theGameState = theButtonMgr->getBtn("play_button")->update(theGameState, gameState::playing, theAreaClicked);
+		gameOver = false;
+		if (theGameState == gameState::playing && gameOver == false)
+		{
+			//theTileMap.update(theShip.getMapPosition(), 1, 0.0f);
+			//theTileMap.update(theBottle.getMapPosition(), 1, 0.0f);
+			//theTileMap.update(thePirate.getMapPosition(), 1, 0.0f);
+			//theShip.setMapPosition(spriteRandom(gen), spriteRandom(gen));
+			//theBottle.genRandomPos(theShip.getMapPosition().R, theShip.getMapPosition().C);
+			//// Lab Code goes here
+			//theTileMap.update(theShip.getMapPosition(), 3, theShip.getShipRotation());
+			//theTileMap.update(theBottle.getMapPosition(), 2, theBottle.getBottleRotation());
+			//theTileMap.update(thePirate.getMapPosition(), 4, thePirate.getEnemyRotation());
+			////// Lab Code goes here
+			//robotsDestroyed = 0;
+		}
 	}
 
 	theGameState = theButtonMgr->getBtn("menu_btn")->update(theGameState, gameState::menu, theAreaClicked);
-	theGameState = theButtonMgr->getBtn("hs_btn")->update(theGameState, gameState::highscore, theAreaClicked);
+	theGameState = theButtonMgr->getBtn("hs_button")->update(theGameState, gameState::highscore, theAreaClicked);
 
 	if (theGameState == gameState::playing)
 	{
 
-		//// Check if ship has collided with the bottle
-		//if (theShip.getMapPosition() == theBottle.getMapPosition())
-		//{
-		//	bottlesCollected++;
-		//	theBottle.genRandomPos(theShip.getMapPosition().R, theShip.getMapPosition().C);
-		//	theTileMap.update(theBottle.getMapPosition(), 2, theBottle.getBottleRotation());
-		//	//Create Updated bottle count
-		//	strScore = gameTextList[5];
-		//	strScore += to_string(bottlesCollected).c_str();
-		//	theTextureMgr->deleteTexture("BottleCount");
-		//}
+		// Check if ship has collided with the bottle
+		IPoint asteroidPos = { (int)theAsteroid.getSpritePos().x, (int)theAsteroid.getSpritePos().y };
+		if (asteroidPos.Y = 400)
+		{
+			theSoundMgr->getSnd("explosion")->play(1);
+			theGameState = gameState::end;
+		}
 
-		// Check if Pirate has collided with the ship
-		// Lab Code goes here
-		// if (theShip.getMapPosition() == thePirate.getMapPosition())
-		// {
-			// theSoundMgr->getSnd("crash")->play(1);
-			// theGameState = gameState::end;
-		// }
+		//bottlesCollected++;
+		//theBottle.genRandomPos(theShip.getMapPosition().R, theShip.getMapPosition().C);
+		//theTileMap.update(theBottle.getMapPosition(), 2, theBottle.getBottleRotation());
+		////Create Updated bottle count
+		//strScore = gameTextList[5];
+		//strScore += to_string(bottlesCollected).c_str();
+		//theTextureMgr->deleteTexture("BottleCount");
 
-		// if (gameOver)
-		// {
+		 // Check if Pirate has collided with the ship
+		 // Lab Code goes here
+		 //if (theShip.getMapPosition() == thePirate.getMapPosition())
+		 //{
+			// theSoundMgr->getSnd("explosion")->play(1);
 			// theGameState = gameState::end;
-		// }
+		 //}
+
+		 if (gameOver)
+		 {
+			 theGameState = gameState::end;
+		 }
 	}
 
 	// Update the visibility and position of each asteriod
@@ -507,6 +507,9 @@ void cGame::update(double deltaTime)
 				theExplosions[index]->setSpritePos({ (*asteroidIterator)->getSpritePos().x + (int)((*asteroidIterator)->getSpritePos().w/2), (*asteroidIterator)->getSpritePos().y + (int)((*asteroidIterator)->getSpritePos().h / 2) });
 
 				theSoundMgr->getSnd("explosion")->play(0);
+
+				strScore = gameTextList[5];
+				strScore += to_string(robotsDestroyed).c_str();
 				
 				// Lab 7 code goes here
 				

@@ -77,7 +77,14 @@ private:
 	btnTypes theBtnType;
 	gameState theGameState;
 	SDL_Point theAreaClicked;
+	cTexture* tempTextTexture;
+	SDL_Rect pos;
 	bool gameOver;
+	string theHighScoreTable;
+	int theHSTableSize;
+	cHighScoreTable theHSTable;
+	int numTableItems;
+	int robotsDestroyed;
 };
 
 #endif
