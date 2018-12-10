@@ -41,6 +41,12 @@ private:
 	duration< double > deltaTime;
 	bool loop;
 
+	/* Let the computer pick a random number */
+	random_device rd;    // non-deterministic engine 
+	mt19937 gen{ rd() }; // deterministic engine. For most common uses, std::mersenne_twister_engine, fast and high-quality.
+	uniform_int_distribution<> AsteroidDis{ 0, 10 };
+	uniform_int_distribution<> AsteroidTextDis{ 0, 0 };
+
 	// Sprites for displaying background and rocket textures
 	cSprite spriteBkgd;
 	cRocket theRocket;
@@ -79,12 +85,14 @@ private:
 	SDL_Point theAreaClicked;
 	cTexture* tempTextTexture;
 	SDL_Rect pos;
-	bool gameOver;
+	bool gameOver = false;
 	string theHighScoreTable;
 	int theHSTableSize;
 	cHighScoreTable theHSTable;
 	int numTableItems;
 	int robotsDestroyed;
+	int frames = 1;
+	bool updateScore = false;
 };
 
 #endif

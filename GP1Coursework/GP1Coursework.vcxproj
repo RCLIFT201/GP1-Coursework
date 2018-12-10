@@ -189,6 +189,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Buttons\hs_button.png" />
+    <Image Include="Buttons\menu_button.png" />
     <Image Include="Buttons\play_button.png" />
     <Image Include="Buttons\quit_button.png" />
     <Image Include="Images\Bkg\Background.png" />
@@ -196,6 +197,9 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <None Include="Data\HighScore.dat" />
     <None Include="Data\HighScore2.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Audio\button_click.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

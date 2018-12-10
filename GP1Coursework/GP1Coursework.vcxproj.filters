@@ -136,9 +136,17 @@
     <Image Include="Images\Bkg\Background.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Buttons\menu_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\HighScore.dat" />
     <None Include="Data\HighScore2.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Audio\button_click.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>
