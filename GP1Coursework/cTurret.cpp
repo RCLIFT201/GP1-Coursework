@@ -1,19 +1,19 @@
 /*
 =================
-cRocket.cpp
+cTurret.cpp
 - Header file for class definition - IMPLEMENTATION
 =================
 */
-#include "cRocket.h"
+#include "cTurret.h"
 
 /*
 =================================================================
 Defualt Constructor
 =================================================================
 */
-cRocket::cRocket() : cSprite()
+cTurret::cTurret() : cSprite()
 {
-	this->rocketVelocity = 0;
+	this->turretVelocity = 0;
 }
 /*
 =================================================================
@@ -21,7 +21,7 @@ Update the sprite position
 =================================================================
 */
 
-void cRocket::update(double deltaTime)
+void cTurret::update(double deltaTime)
 {
 	auto rads = PI / 90.0f * (this->getSpriteRotAngle() - 90.0f); // Changed 180.0f to 90.0f to allow player to move only left or right
 
@@ -31,8 +31,8 @@ void cRocket::update(double deltaTime)
 
 	SDL_Rect currentSpritePos = this->getSpritePos();
 	
-	currentSpritePos.x += (int)(this->rocketVelocity * direction.X * this->move * deltaTime);
-	currentSpritePos.y -= (int)(this->rocketVelocity * direction.Y * this->move * deltaTime);
+	currentSpritePos.x += (int)(this->turretVelocity * direction.X * this->move * deltaTime);
+	currentSpritePos.y -= (int)(this->turretVelocity * direction.Y * this->move * deltaTime);
 
 	this->setSpritePos({ currentSpritePos.x , currentSpritePos.y  });
 	this->setBoundingRect(this->getSpritePos());
@@ -40,37 +40,37 @@ void cRocket::update(double deltaTime)
 }
 /*
 =================================================================
-Sets the velocity for the rocket
+Sets the velocity for the turret
 =================================================================
 */
-void cRocket::setRocketVelocity(int rocketVel)
+void cTurret::setTurretVelocity(int turretVel)
 {
-	rocketVelocity = rocketVel;
+	turretVelocity = turretVel;
 }
 /*
 =================================================================
-Gets the rocket velocity
+Gets the turret velocity
 =================================================================
 */
-int cRocket::getRocketVelocity()
+int cTurret::getTurretVelocity()
 {
-	return rocketVelocity;
+	return turretVelocity;
 }
 /*
 =================================================================
-Sets the move value for the rocket
+Sets the move value for the turret
 =================================================================
 */
-void cRocket::setRocketMove(int rocketMove)
+void cTurret::setTurretMove(int turretMove)
 {
-	move = rocketMove;
+	move = turretMove;
 }
 /*
 =================================================================
-Gets the rocket move value
+Gets the turret move value
 =================================================================
 */
-int cRocket::getRocketMove()
+int cTurret::getTurretMove()
 {
 	return move;
 }

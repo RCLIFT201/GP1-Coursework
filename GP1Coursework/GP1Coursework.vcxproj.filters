@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="asteroidsGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cAsteroid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cBkGround.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -40,9 +34,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cRocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cSDL2WNDManager.h">
@@ -69,14 +60,17 @@
     <ClInclude Include="cHighScoreTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cTurret.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cRobot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="robotsGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsteroidsSDL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cAsteroid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cBkGround.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,9 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cGameStuVer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cRocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cSDL2WNDManager.cpp">
@@ -122,6 +113,15 @@
     <ClCompile Include="cHighScoreTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cTurret.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cRobot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotsSDL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Buttons\play_button.png">
@@ -139,6 +139,12 @@
     <Image Include="Buttons\menu_button.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Images\Sprites\Turret.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Bkg\GameOverBackground.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\HighScore.dat" />
@@ -146,6 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="Audio\button_click.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Audio\gameOver.wav">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>

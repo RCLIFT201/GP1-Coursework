@@ -10,7 +10,7 @@ cGame.h
 #include <SDL.h>
 #include <random>
 // Game specific includes
-#include "asteroidsGame.h"
+#include "robotsGame.h"
 
 
 using namespace std;
@@ -44,13 +44,13 @@ private:
 	/* Let the computer pick a random number */
 	random_device rd;    // non-deterministic engine 
 	mt19937 gen{ rd() }; // deterministic engine. For most common uses, std::mersenne_twister_engine, fast and high-quality.
-	uniform_int_distribution<> AsteroidDis{ 0, 10 };
-	uniform_int_distribution<> AsteroidTextDis{ 0, 0 };
+	uniform_int_distribution<> RobotDis{ 0, 10 };
+	uniform_int_distribution<> RobotTextDis{ 0, 0 };
 
-	// Sprites for displaying background and rocket textures
+	// Sprites for displaying background and turret textures
 	cSprite spriteBkgd;
-	cRocket theRocket;
-	cAsteroid theAsteroid;
+	cTurret theTurret;
+	cRobot theRobot;
 	cBullet theBullet;
 	// game related variables
 	vector<LPCSTR> textureName;
@@ -60,7 +60,7 @@ private:
 	vector<LPCSTR> btnTexturesToUse;
 	vector<SDL_Point> btnPos;
 	vector<cButton> theButtons;
-	vector<cAsteroid*> theAsteroids;
+	vector<cRobot*> theRobots;
 	vector<cBullet*> theBullets;
 	vector<cSprite*> theExplosions;
 	// Fonts to use

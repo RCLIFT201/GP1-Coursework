@@ -1,19 +1,19 @@
 /*
 =================
-cAsteroid.cpp
+cRobot.cpp
 - Header file for class definition - IMPLEMENTATION
 =================
 */
-#include "cAsteroid.h"
+#include "cRobot.h"
 
 /*
 =================================================================
 Defualt Constructor
 =================================================================
 */
-cAsteroid::cAsteroid() : cSprite()
+cRobot::cRobot() : cSprite()
 {
-	this->asteroidVelocity = 0;
+	this->robotVelocity = 0;
 }
 /*
 =================================================================
@@ -21,7 +21,7 @@ Update the sprite position
 =================================================================
 */
 
-void cAsteroid::update(double deltaTime)
+void cRobot::update(double deltaTime)
 {
 
 	SDL_Rect currentSpritePos = this->getSpritePos();
@@ -33,19 +33,19 @@ void cAsteroid::update(double deltaTime)
 }
 /*
 =================================================================
-  Sets the velocity for the Asteroid
+  Sets the velocity for the Robot
 =================================================================
 */
-void cAsteroid::setAsteroidVelocity(int AsteroidVel)
+void cRobot::setRobotVelocity(int RobotVel)
 {
-	asteroidVelocity = AsteroidVel;
+	robotVelocity = RobotVel;
 }
 /*
 =================================================================
-  Gets the Asteroid velocity
+  Gets the Robot velocity
 =================================================================
 */
-int cAsteroid::getAsteroidVelocity()
+int cRobot::getRobotVelocity()
 {
-	return asteroidVelocity;
+	return robotVelocity;
 }

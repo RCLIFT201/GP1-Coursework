@@ -43,12 +43,6 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	// Clear the buffer with a black background
 	SDL_SetRenderDrawColor(theRenderer, 0, 0, 0, 255);
 	SDL_RenderPresent(theRenderer);
-	
-	///* Let the computer pick a random number */
-	//random_device rd;    // non-deterministic engine 
-	//mt19937 gen{ rd() }; // deterministic engine. For most common uses, std::mersenne_twister_engine, fast and high-quality.
-	//uniform_int_distribution<> AsteroidDis{ 0, 10 };
-	//uniform_int_distribution<> AsteroidTextDis{ 0, 0 };
 
 	theTextureMgr->setRenderer(theRenderer);
 	theFontMgr->initFontLib();
@@ -57,8 +51,8 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	theAreaClicked = { 0, 0 };
 	// Store the textures
-	textureName = { "Enemy", "bullet_clipart", "explosion", "Tank", "MainMenuBackground","GameOverBackground" };
-	texturesToUse = { "Images\\Sprites\\Enemy.png", "Images\\Sprites\\Bullet_ClipArt.png", "Images\\Sprites\\explosion.png", "Images\\Sprites\\Tank.png", "Images\\Bkg\\MainMenuBackground.png", "Images\\Bkg\\MainMenuBackground.png" };
+	textureName = { "Enemy", "bullet_clipart", "explosion", "Turret", "MainMenuBackground","GameOverBackground" };
+	texturesToUse = { "Images\\Sprites\\Enemy.png", "Images\\Sprites\\Bullet_ClipArt.png", "Images\\Sprites\\explosion.png", "Images\\Sprites\\Turret.png", "Images\\Bkg\\MainMenuBackground.png", "Images\\Bkg\\GameOverBackground.png" };
 	for (int tCount = 0; tCount < (int)textureName.size(); tCount++)
 	{	
 		theTextureMgr->addTexture(textureName[tCount], texturesToUse[tCount]);
@@ -67,7 +61,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	// Store the textures
 	btnNameList = { "quit_button", "menu_button", "play_button", };
 	btnTexturesToUse = { "Buttons/quit_button.png", "Buttons/menu_button.png", "Buttons/play_button.png" };
-	btnPos = { { 400, 375 },{ 400, 300 },{ 400, 300 },{ 500, 500 },{ 400, 300 },{ 740, 500 },{ 400, 300 },{ 400, 500 } };
+	btnPos = { { 400, 375 },{ 400, 300 },{ 400, 300 } };
 	for (unsigned int bCount = 0; bCount < btnNameList.size(); bCount++)
 	{
 		theTextureMgr->addTexture(btnNameList[bCount], btnTexturesToUse[bCount]);
@@ -98,8 +92,8 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTextureMgr->addTexture("theScore", theFontMgr->getFont("retro")->createTextTexture(theRenderer, strScore.c_str(), textType::solid, { 255, 0, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Create text Textures
-	gameTextNames = { "ObjectiveTxt", "InstructTxt", "ThanksTxt", "SeeYouTxt", "robotsKilled" };
-	gameTextList = { "Kill all the invading robots!", "Use the arrow keys to move left or right.", "Thanks for playing!", "See you again soon!", "Score : " };
+	gameTextNames = { "gameOver", "SeeYouTxt", "robotsKilled", "moveText", "shootText" };
+	gameTextList = { "GAME OVER", "See you again soon!", "Score : ", "- Use the arrow keys to move", "- Use spacebar to shoot the robots" };
 	for (unsigned int text = 0; text < gameTextNames.size(); text++)
 	{
 		if (text == 0 || text == gameTextNames.size() - 1)
@@ -113,9 +107,9 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	}
 
 	// Load game sounds
-	soundList = { "gameTheme", "menuMusic", "laserShot", "explosion" };
-	soundTypes = { soundType::music, soundType::music, soundType::sfx, soundType::sfx };
-	soundsToUse = { "Audio/InGameTheme.wav", "Audio/menuMusic.wav", "Audio/laserShot.wav", "Audio/explosion2.aiff" };
+	soundList = { "gameTheme", "menuMusic", "laserShot", "explosion", "gameOver" };
+	soundTypes = { soundType::music, soundType::music, soundType::sfx, soundType::sfx, soundType::sfx };
+	soundsToUse = { "Audio/InGameTheme.wav", "Audio/menuMusic.wav", "Audio/laserShot.wav", "Audio/explosion2.aiff", "Audio/gameOver.wav" };
 	for (int sounds = 0; sounds < (int)soundList.size(); sounds++)
 	{
 		theSoundMgr->add(soundList[sounds], soundsToUse[sounds], soundTypes[sounds]);
@@ -127,24 +121,28 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	spriteBkgd.setTexture(theTextureMgr->getTexture("MainMenuBackground"));
 	spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("MainMenuBackground")->getTWidth(), theTextureMgr->getTexture("MainMenuBackground")->getTHeight());
 
-	theRocket.setSpritePos({ 450, 640 });
-	theRocket.setTexture(theTextureMgr->getTexture("Tank"));
-	theRocket.setSpriteDimensions(theTextureMgr->getTexture("Tank")->getTWidth(), theTextureMgr->getTexture("Tank")->getTHeight());
-	theRocket.setRocketVelocity(75);
-	theRocket.setSpriteTranslation({ 50,50 });
+	spriteBkgd.setSpritePos({ 0, 0 });
+	spriteBkgd.setTexture(theTextureMgr->getTexture("GameOverBackground"));
+	spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("GameOverBackground")->getTWidth(), theTextureMgr->getTexture("GameOverBackground")->getTHeight());
+
+	theTurret.setSpritePos({ 450, 640 });
+	theTurret.setTexture(theTextureMgr->getTexture("Turret"));
+	theTurret.setSpriteDimensions(theTextureMgr->getTexture("Turret")->getTWidth(), theTextureMgr->getTexture("Turret")->getTHeight());
+	theTurret.setTurretVelocity(75);
+	theTurret.setSpriteTranslation({ 50,50 });
 
 
 	 // Create vector array of textures
 	for (int astro = 0; astro < 5; astro++)
 	{
-		theAsteroids.push_back(new cAsteroid);
-		theAsteroids[astro]->setSpritePos({ (80 * (astro + 1) + (60*astro)), -50 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
-		theAsteroids[astro]->setSpriteTranslation({ 0, -120 }); // Moves enemies down
-		int randAsteroid = AsteroidTextDis(gen);
-		theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
-		theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
-		theAsteroids[astro]->setAsteroidVelocity(200);
-		theAsteroids[astro]->setActive(true);
+		theRobots.push_back(new cRobot);
+		theRobots[astro]->setSpritePos({ (80 * (astro + 1) + (60*astro)), -50 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
+		theRobots[astro]->setSpriteTranslation({ 0, -120 }); // Moves enemies down
+		int randRobot = RobotTextDis(gen);
+		theRobots[astro]->setTexture(theTextureMgr->getTexture(textureName[randRobot]));
+		theRobots[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randRobot])->getTWidth(), theTextureMgr->getTexture(textureName[randRobot])->getTHeight());
+		theRobots[astro]->setRobotVelocity(200);
+		theRobots[astro]->setActive(true);
 	}
 
 	gameOver = false;
@@ -182,6 +180,15 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		scale = { 1, 1 };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
+
+		tempTextTexture = theTextureMgr->getTexture("moveText");
+		pos = { 50, 70, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
+		tempTextTexture = theTextureMgr->getTexture("shootText");
+		pos = { 50, 110, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
 		// Render Button
 		theButtonMgr->getBtn("play_button")->setSpritePos({ 400, 375 });
 		theButtonMgr->getBtn("play_button")->render(theRenderer, &theButtonMgr->getBtn("play_button")->getSpriteDimensions(), &theButtonMgr->getBtn("play_button")->getSpritePos(), theButtonMgr->getBtn("play_button")->getSpriteScale());
@@ -196,11 +203,15 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		spriteBkgd.setTexture(theTextureMgr->getTexture("MainMenuBackground"));
 		spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("MainMenuBackground")->getTWidth(), theTextureMgr->getTexture("MainMenuBackground")->getTHeight());
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+
+		theButtonMgr->getBtn("quit_button")->setSpritePos({ 20, 640 });
+		theButtonMgr->getBtn("quit_button")->render(theRenderer, &theButtonMgr->getBtn("quit_button")->getSpriteDimensions(), &theButtonMgr->getBtn("quit_button")->getSpritePos(), theButtonMgr->getBtn("quit_button")->getSpriteScale());
+
 		
-		// Render each asteroid in the vector array
-		for (int draw = 0; draw < (int)theAsteroids.size(); draw++)
+		// Render each robot in the vector array
+		for (int draw = 0; draw < (int)theRobots.size(); draw++)
 		{
-			theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
+			theRobots[draw]->render(theRenderer, &theRobots[draw]->getSpriteDimensions(), &theRobots[draw]->getSpritePos(), theRobots[draw]->getSpriteRotAngle(), &theRobots[draw]->getSpriteCentre(), theRobots[draw]->getSpriteScale());
 		}
 
 		// Render each bullet in the vector array
@@ -232,8 +243,8 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		scale = { 1, 1 };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
-		// render the rocket
-		theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
+		// render the turret
+		theTurret.render(theRenderer, &theTurret.getSpriteDimensions(), &theTurret.getSpritePos(), theTurret.getSpriteRotAngle(), &theTurret.getSpriteCentre(), theTurret.getSpriteScale());
 	}
 	break;
 	case gameState::end:
@@ -244,15 +255,12 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
 		SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-		tempTextTexture = theTextureMgr->getTexture("ThanksTxt");
-		pos = { 50, 100, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		tempTextTexture = theTextureMgr->getTexture("gameOver");
+		pos = { 425, 150, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-		tempTextTexture = theTextureMgr->getTexture("SeeYouTxt");
-		pos = { 50, 175, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-		theButtonMgr->getBtn("menu_button")->setSpritePos({ 500, 500 });
+		theButtonMgr->getBtn("menu_button")->setSpritePos({ 500, 375 });
 		theButtonMgr->getBtn("menu_button")->render(theRenderer, &theButtonMgr->getBtn("menu_button")->getSpriteDimensions(), &theButtonMgr->getBtn("menu_button")->getSpritePos(), theButtonMgr->getBtn("menu_button")->getSpriteScale());
-		theButtonMgr->getBtn("quit_button")->setSpritePos({ 500, 575 });
+		theButtonMgr->getBtn("quit_button")->setSpritePos({ 500, 475 });
 		theButtonMgr->getBtn("quit_button")->render(theRenderer, &theButtonMgr->getBtn("quit_button")->getSpriteDimensions(), &theButtonMgr->getBtn("quit_button")->getSpritePos(), theButtonMgr->getBtn("quit_button")->getSpriteScale());
 
 		// render score on end screen
@@ -287,11 +295,11 @@ void cGame::update()
 void cGame::update(double deltaTime)
 {
 	// Keeps the player within the boundary of the screen, if they hit the edge then they bounce back
-	IPoint rocketPos = { (int)theRocket.getSpritePos().x, (int)theRocket.getSpritePos().y };
-	if (rocketPos.X >= 910 || rocketPos.X <= 0)
+	IPoint turretPos = { (int)theTurret.getSpritePos().x, (int)theTurret.getSpritePos().y };
+	if (turretPos.X >= 910 || turretPos.X <= 0)
 	{
-		theRocket.setSpritePos({ theRocket.getSpritePos().x, theRocket.getSpritePos().y });
-		theRocket.setRocketMove(theRocket.getRocketMove()*(-1));
+		theTurret.setSpritePos({ theTurret.getSpritePos().x, theTurret.getSpritePos().y });
+		theTurret.setTurretMove(theTurret.getTurretMove()*(-1));
 	}
 
 	// Check Button clicked and change state
@@ -299,11 +307,18 @@ void cGame::update(double deltaTime)
 	{
 		theGameState = theButtonMgr->getBtn("quit_button")->update(theGameState, gameState::quit, theAreaClicked);
 	}
+	else
+	{
+		theGameState = theButtonMgr->getBtn("quit_button")->update(theGameState, gameState::end, theAreaClicked);
+	}
 
 	if (theGameState == gameState::menu)
 	{
 		theGameState = theButtonMgr->getBtn("play_button")->update(theGameState, gameState::playing, theAreaClicked);
 		gameOver = false;
+		theScore = 0;
+		strScore = gameTextList[2];
+		strScore += to_string(theScore).c_str();
 	}
 
 	theGameState = theButtonMgr->getBtn("menu_button")->update(theGameState, gameState::menu, theAreaClicked);
@@ -312,25 +327,25 @@ void cGame::update(double deltaTime)
 	{
 		gameOver = false;
 
-		// Update the visibility and position of each asteriod
-		vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin();
-		while (asteroidIterator != theAsteroids.end())
+		// Update the visibility and position of each robot
+		vector<cRobot*>::iterator robotIterator = theRobots.begin();
+		while (robotIterator != theRobots.end())
 		{
-			if ((*asteroidIterator)->isActive() == false)
+			if ((*robotIterator)->isActive() == false)
 			{
-				asteroidIterator = theAsteroids.erase(asteroidIterator);
+				robotIterator = theRobots.erase(robotIterator);
 			}
 			else  
 			{
-				(*asteroidIterator)->update(deltaTime);
-				if ((*asteroidIterator)->getSpritePos().y >= 700)
+				(*robotIterator)->update(deltaTime);
+				if ((*robotIterator)->getSpritePos().y >= 700)
 				{
-					theSoundMgr->getSnd("explosion")->play(1);
+					theSoundMgr->getSnd("gameOver")->play(0);
 					theGameState = gameState::end;
 					gameOver = true;
 					theAreaClicked = { 0,0 };
 				}
-				++asteroidIterator;
+				++robotIterator;
 			}
 		}
 
@@ -372,13 +387,13 @@ void cGame::update(double deltaTime)
 		for (vector<cBullet*>::iterator bulletIterartor = theBullets.begin(); bulletIterartor != theBullets.end(); ++bulletIterartor)
 		{
 			//(*bulletIterartor)->update(deltaTime);
-			for (vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin(); asteroidIterator != theAsteroids.end(); ++asteroidIterator)
+			for (vector<cRobot*>::iterator robotIterator = theRobots.begin(); robotIterator != theRobots.end(); ++robotIterator)
 			{
 
-				if ((*asteroidIterator)->collidedWith(&(*asteroidIterator)->getBoundingRect(), &(*bulletIterartor)->getBoundingRect()))
+				if ((*robotIterator)->collidedWith(&(*robotIterator)->getBoundingRect(), &(*bulletIterartor)->getBoundingRect()))
 				{
-					// if a collision set the bullet and asteroid to false
-					(*asteroidIterator)->setActive(false);
+					// if a collision set the bullet and robot to false
+					(*robotIterator)->setActive(false);
 					(*bulletIterartor)->setActive(false);
 					theExplosions.push_back(new cSprite);
 					int index = theExplosions.size()-1;
@@ -387,36 +402,36 @@ void cGame::update(double deltaTime)
 					theExplosions[index]->setNoFrames(16);
 					theExplosions[index]->setTexture(theTextureMgr->getTexture("explosion"));
 					theExplosions[index]->setSpriteDimensions(theTextureMgr->getTexture("explosion")->getTWidth()/ theExplosions[index]->getNoFrames(), theTextureMgr->getTexture("explosion")->getTHeight());
-					theExplosions[index]->setSpritePos({ (*asteroidIterator)->getSpritePos().x + (int)((*asteroidIterator)->getSpritePos().w/2), (*asteroidIterator)->getSpritePos().y + (int)((*asteroidIterator)->getSpritePos().h / 2) });
+					theExplosions[index]->setSpritePos({ (*robotIterator)->getSpritePos().x + (int)((*robotIterator)->getSpritePos().w/2), (*robotIterator)->getSpritePos().y + (int)((*robotIterator)->getSpritePos().h / 2) });
 
 					theSoundMgr->getSnd("explosion")->play(0);
 					theScore += 1;
-					strScore = gameTextList[4];
+					strScore = gameTextList[2];
 					strScore += to_string(theScore).c_str();
 					updateScore = true;
 				}
 			}
 		}
 	
-		// Update the Rockets position
-		theRocket.update(deltaTime);
+		// Update the Turets position
+		theTurret.update(deltaTime);
 
 		// Create vector array of textures
 		if (frames % 100 == 0)
 		{
-			int currentSize = theAsteroids.size();
+			int currentSize = theRobots.size();
 			int end = currentSize + 5;
 			int count = 1;
 			for (int astro = currentSize; astro < end; astro++)
 			{
-				theAsteroids.push_back(new cAsteroid);
-				theAsteroids[astro]->setSpritePos({ (80 * (count + 1) + (60 * count)), -50 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
-				theAsteroids[astro]->setSpriteTranslation({ 0, -120 }); // Moves enemies down
-				int randAsteroid = AsteroidTextDis(gen);
-				theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
-				theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
-				theAsteroids[astro]->setAsteroidVelocity(200);
-				theAsteroids[astro]->setActive(true);
+				theRobots.push_back(new cRobot);
+				theRobots[astro]->setSpritePos({ (80 * (count) + (60 * count)), -50 }); // Enemies randomly spawn on x-axis, and always on 0 on the y-axis
+				theRobots[astro]->setSpriteTranslation({ 0, -120 }); // Moves enemies down
+				int randRobot = RobotTextDis(gen);
+				theRobots[astro]->setTexture(theTextureMgr->getTexture(textureName[randRobot]));
+				theRobots[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randRobot])->getTWidth(), theTextureMgr->getTexture(textureName[randRobot])->getTHeight());
+				theRobots[astro]->setRobotVelocity(200);
+				theRobots[astro]->setActive(true);
 				count++;
 			}
 		}
@@ -426,6 +441,9 @@ void cGame::update(double deltaTime)
  		if (gameOver)
 		{
 			theGameState = gameState::end;
+			theRobots.clear();
+			theBullets.clear();
+			updateScore = true;
 		}
 
 	}
@@ -492,34 +510,36 @@ bool cGame::getInput(bool theLoop)
 				break;
 				case SDLK_RIGHT:
 				{
-					theRocket.setRocketMove(-3); // Allows player to move right
+					theTurret.setTurretMove(-3); // Allows player to move right
 				}
 				break;
 
 				case SDLK_LEFT:
 				{
-					theRocket.setRocketMove(3); // Allows player to move left
+					theTurret.setTurretMove(3); // Allows player to move left
 				}
 				break;
 				case SDLK_SPACE:
 				{
-					theBullets.push_back(new cBullet);
-					int numBullets = theBullets.size() - 1;
-					theBullets[numBullets]->setSpritePos({ theRocket.getBoundingRect().x + theRocket.getSpriteCentre().x, theRocket.getBoundingRect().y + theRocket.getSpriteCentre().y });
-					theBullets[numBullets]->setSpriteTranslation({ 50, 50 });
-					theBullets[numBullets]->setTexture(theTextureMgr->getTexture("bullet_clipart"));
-					theBullets[numBullets]->setSpriteDimensions(theTextureMgr->getTexture("bullet_clipart")->getTWidth(), theTextureMgr->getTexture("bullet_clipart")->getTHeight());
-					theBullets[numBullets]->setBulletVelocity(15); // Changed bullet speed so that it is slightly slower
-					theBullets[numBullets]->setSpriteRotAngle(theRocket.getSpriteRotAngle());
-					theBullets[numBullets]->setActive(true);
-					cout << "Bullet added to Vector at position - x: " << theRocket.getBoundingRect().x << " y: " << theRocket.getBoundingRect().y << endl;
+					if (theGameState == gameState::playing)
+					{
+						theBullets.push_back(new cBullet);
+						int numBullets = theBullets.size() - 1;
+						theBullets[numBullets]->setSpritePos({ theTurret.getBoundingRect().x + theTurret.getSpriteCentre().x, theTurret.getBoundingRect().y + theTurret.getSpriteCentre().y });
+						theBullets[numBullets]->setSpriteTranslation({ 50, 50 });
+						theBullets[numBullets]->setTexture(theTextureMgr->getTexture("bullet_clipart"));
+						theBullets[numBullets]->setSpriteDimensions(theTextureMgr->getTexture("bullet_clipart")->getTWidth(), theTextureMgr->getTexture("bullet_clipart")->getTHeight());
+						theBullets[numBullets]->setBulletVelocity(10); // Changed bullet speed so that it is slightly slower
+						theBullets[numBullets]->setSpriteRotAngle(theTurret.getSpriteRotAngle());
+						theBullets[numBullets]->setActive(true);
+						cout << "Bullet added to Vector at position - x: " << theTurret.getBoundingRect().x << " y: " << theTurret.getBoundingRect().y << endl;
+						theSoundMgr->getSnd("laserShot")->play(0);
+					}
 				}
-				theSoundMgr->getSnd("laserShot")->play(0);
 				break;
 				default:
 					break;
 				}
-
 			default:
 				break;
 		}

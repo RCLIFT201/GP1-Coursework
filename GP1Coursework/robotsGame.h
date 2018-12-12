@@ -1,5 +1,5 @@
-#ifndef _ASTEROIDSGAME_H
-#define _ASTEROIDSGAME_H
+#ifndef _ROBOTSGAME_H
+#define _ROBOTSGAME_H
 
 // Card game headers
 #include "GameConstants.h"
@@ -7,9 +7,9 @@
 #include "cBkGround.h"
 #include "cTextureMgr.h"
 #include "cTexture.h"
-#include "cAsteroid.h"
+#include "cRobot.h"
 #include "cBullet.h"
-#include "cRocket.h"
+#include "cTurret.h"
 #include "cFontMgr.h"
 #include "cSoundMgr.h"
 #include "cButton.h"
