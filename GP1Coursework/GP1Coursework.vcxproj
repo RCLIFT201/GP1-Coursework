@@ -197,6 +197,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <Image Include="Images\Sprites\Turret.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Data\HighScore.dat" />
     <None Include="Data\HighScore2.dat" />
   </ItemGroup>

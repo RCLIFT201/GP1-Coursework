@@ -34,7 +34,6 @@ cGame* cGame::getInstance()
 	return cGame::pInstance;
 }
 
-
 void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
 	// Get width and height of render context
@@ -134,7 +133,6 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTurret.setTurretVelocity(75);
 	theTurret.setSpriteTranslation({ 50,50 });
 
-
 	 // Create vector array of textures for robots
 	for (int astro = 0; astro < 5; astro++)
 	{
@@ -165,7 +163,6 @@ void cGame::run(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		this->render(theSDLWND, theRenderer);
 	}
 }
-
 
 void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {

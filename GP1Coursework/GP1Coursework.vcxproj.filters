@@ -149,6 +149,7 @@
   <ItemGroup>
     <None Include="Data\HighScore.dat" />
     <None Include="Data\HighScore2.dat" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Audio\button_click.wav">
