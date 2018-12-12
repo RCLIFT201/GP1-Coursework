@@ -50,7 +50,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theScore = 0;
 
 	theAreaClicked = { 0, 0 };
-	// Store the textures
+	// Store the sprite and background textures
 	textureName = { "Enemy", "bullet_clipart", "explosion", "Turret", "MainMenuBackground","GameOverBackground" };
 	texturesToUse = { "Images\\Sprites\\Enemy.png", "Images\\Sprites\\Bullet_ClipArt.png", "Images\\Sprites\\explosion.png", "Images\\Sprites\\Turret.png", "Images\\Bkg\\MainMenuBackground.png", "Images\\Bkg\\GameOverBackground.png" };
 	for (int tCount = 0; tCount < (int)textureName.size(); tCount++)
@@ -58,7 +58,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		theTextureMgr->addTexture(textureName[tCount], texturesToUse[tCount]);
 	}
 
-	// Store the textures
+	// Store the button textures
 	btnNameList = { "quit_button", "menu_button", "play_button", };
 	btnTexturesToUse = { "Buttons/quit_button.png", "Buttons/menu_button.png", "Buttons/play_button.png" };
 	btnPos = { { 400, 375 },{ 400, 300 },{ 400, 300 } };
@@ -117,14 +117,17 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	theSoundMgr->getSnd("gameTheme")->play(-1);
 
+	// Set Main Menu Background
 	spriteBkgd.setSpritePos({ 0, 0 });
 	spriteBkgd.setTexture(theTextureMgr->getTexture("MainMenuBackground"));
 	spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("MainMenuBackground")->getTWidth(), theTextureMgr->getTexture("MainMenuBackground")->getTHeight());
 
+	// Set Game Over Background
 	spriteBkgd.setSpritePos({ 0, 0 });
 	spriteBkgd.setTexture(theTextureMgr->getTexture("GameOverBackground"));
 	spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("GameOverBackground")->getTWidth(), theTextureMgr->getTexture("GameOverBackground")->getTHeight());
 
+	// Set sprite of the Turret
 	theTurret.setSpritePos({ 450, 640 });
 	theTurret.setTexture(theTextureMgr->getTexture("Turret"));
 	theTurret.setSpriteDimensions(theTextureMgr->getTexture("Turret")->getTWidth(), theTextureMgr->getTexture("Turret")->getTHeight());
@@ -132,7 +135,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTurret.setSpriteTranslation({ 50,50 });
 
 
-	 // Create vector array of textures
+	 // Create vector array of textures for robots
 	for (int astro = 0; astro < 5; astro++)
 	{
 		theRobots.push_back(new cRobot);
@@ -168,8 +171,11 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
 	switch (theGameState)
 	{
+
+	// Renders Main Menu game state
 	case gameState::menu:
 	{
+		// Render the Background
 		spriteBkgd.setTexture(theTextureMgr->getTexture("MainMenuBackground"));
 		spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("MainMenuBackground")->getTWidth(), theTextureMgr->getTexture("MainMenuBackground")->getTHeight());
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
@@ -180,16 +186,17 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		scale = { 1, 1 };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
-
+		// Render the Move Text
 		tempTextTexture = theTextureMgr->getTexture("moveText");
 		pos = { 50, 70, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
+		// Render the Shoot Text
 		tempTextTexture = theTextureMgr->getTexture("shootText");
 		pos = { 50, 110, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
-		// Render Button
+		// Render Buttons
 		theButtonMgr->getBtn("play_button")->setSpritePos({ 400, 375 });
 		theButtonMgr->getBtn("play_button")->render(theRenderer, &theButtonMgr->getBtn("play_button")->getSpriteDimensions(), &theButtonMgr->getBtn("play_button")->getSpritePos(), theButtonMgr->getBtn("play_button")->getSpriteScale());
 		theButtonMgr->getBtn("quit_button")->setSpritePos({ 400, 475 });
@@ -198,16 +205,19 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		gameOver = false;
 	}
 	break;
+
+	// Renders PLaying game state
 	case gameState::playing:
 	{
+		// Render the Background
 		spriteBkgd.setTexture(theTextureMgr->getTexture("MainMenuBackground"));
 		spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("MainMenuBackground")->getTWidth(), theTextureMgr->getTexture("MainMenuBackground")->getTHeight());
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
+		// Render Button
 		theButtonMgr->getBtn("quit_button")->setSpritePos({ 20, 640 });
 		theButtonMgr->getBtn("quit_button")->render(theRenderer, &theButtonMgr->getBtn("quit_button")->getSpriteDimensions(), &theButtonMgr->getBtn("quit_button")->getSpritePos(), theButtonMgr->getBtn("quit_button")->getSpriteScale());
 
-		
 		// Render each robot in the vector array
 		for (int draw = 0; draw < (int)theRobots.size(); draw++)
 		{
@@ -232,6 +242,7 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		FPoint scale = { 1, 1 };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
+		// Render the score
 		if (updateScore)
 		{
 			theTextureMgr->deleteTexture("theScore");
@@ -247,29 +258,40 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		theTurret.render(theRenderer, &theTurret.getSpriteDimensions(), &theTurret.getSpritePos(), theTurret.getSpriteRotAngle(), &theTurret.getSpriteCentre(), theTurret.getSpriteScale());
 	}
 	break;
+
+	// Renders Game Over game state
 	case gameState::end:
 	{
+		// Render the background
 		spriteBkgd.setTexture(theTextureMgr->getTexture("GameOverBackground"));
 		spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("GameOverBackground")->getTWidth(), theTextureMgr->getTexture("GameOverBackground")->getTHeight());
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+
+		//Render the Title
 		cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
 		SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+		
+		// Render Game Over Text
 		tempTextTexture = theTextureMgr->getTexture("gameOver");
 		pos = { 425, 150, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+		
+		// Render Buttons
 		theButtonMgr->getBtn("menu_button")->setSpritePos({ 500, 375 });
 		theButtonMgr->getBtn("menu_button")->render(theRenderer, &theButtonMgr->getBtn("menu_button")->getSpriteDimensions(), &theButtonMgr->getBtn("menu_button")->getSpritePos(), theButtonMgr->getBtn("menu_button")->getSpriteScale());
 		theButtonMgr->getBtn("quit_button")->setSpritePos({ 500, 475 });
 		theButtonMgr->getBtn("quit_button")->render(theRenderer, &theButtonMgr->getBtn("quit_button")->getSpriteDimensions(), &theButtonMgr->getBtn("quit_button")->getSpritePos(), theButtonMgr->getBtn("quit_button")->getSpriteScale());
 
-		// render score on end screen
+		// Render Score on End Screen
 		tempTextTexture = theTextureMgr->getTexture("theScore");
 		pos = { 700, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 		scale = { 1, 1 };
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 	}
 	break;
+
+	// Renders Quit game state
 	case gameState::quit:
 	{
 		loop = false;
@@ -312,16 +334,25 @@ void cGame::update(double deltaTime)
 		theGameState = theButtonMgr->getBtn("quit_button")->update(theGameState, gameState::end, theAreaClicked);
 	}
 
+	theGameState = theButtonMgr->getBtn("menu_button")->update(theGameState, gameState::menu, theAreaClicked);
+
 	if (theGameState == gameState::menu)
 	{
 		theGameState = theButtonMgr->getBtn("play_button")->update(theGameState, gameState::playing, theAreaClicked);
 		gameOver = false;
+
+		// If on Main Menu, reset the score
 		theScore = 0;
 		strScore = gameTextList[2];
 		strScore += to_string(theScore).c_str();
 	}
 
-	theGameState = theButtonMgr->getBtn("menu_button")->update(theGameState, gameState::menu, theAreaClicked);
+	if (theGameState == gameState::end)
+	{
+		// clears the robots and bullets so that the game can be replayed
+		theRobots.clear();
+		theBullets.clear();
+	}
 
 	if (theGameState == gameState::playing && gameOver == false)
 	{
@@ -338,6 +369,7 @@ void cGame::update(double deltaTime)
 			else  
 			{
 				(*robotIterator)->update(deltaTime);
+				// If robot hits bottom of the screen, ends the game and changes game state
 				if ((*robotIterator)->getSpritePos().y >= 700)
 				{
 					theSoundMgr->getSnd("gameOver")->play(0);
@@ -404,6 +436,7 @@ void cGame::update(double deltaTime)
 					theExplosions[index]->setSpriteDimensions(theTextureMgr->getTexture("explosion")->getTWidth()/ theExplosions[index]->getNoFrames(), theTextureMgr->getTexture("explosion")->getTHeight());
 					theExplosions[index]->setSpritePos({ (*robotIterator)->getSpritePos().x + (int)((*robotIterator)->getSpritePos().w/2), (*robotIterator)->getSpritePos().y + (int)((*robotIterator)->getSpritePos().h / 2) });
 
+					// If a collision, play explosion sound and update score
 					theSoundMgr->getSnd("explosion")->play(0);
 					theScore += 1;
 					strScore = gameTextList[2];
@@ -416,7 +449,7 @@ void cGame::update(double deltaTime)
 		// Update the Turets position
 		theTurret.update(deltaTime);
 
-		// Create vector array of textures
+		// Respawn enemies after 100 frames
 		if (frames % 100 == 0)
 		{
 			int currentSize = theRobots.size();
@@ -441,8 +474,6 @@ void cGame::update(double deltaTime)
  		if (gameOver)
 		{
 			theGameState = gameState::end;
-			theRobots.clear();
-			theBullets.clear();
 			updateScore = true;
 		}
 
@@ -521,6 +552,7 @@ bool cGame::getInput(bool theLoop)
 				break;
 				case SDLK_SPACE:
 				{
+					// bullets can only be shot during Playing game state
 					if (theGameState == gameState::playing)
 					{
 						theBullets.push_back(new cBullet);
