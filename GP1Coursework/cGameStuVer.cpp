@@ -46,9 +46,13 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTextureMgr->setRenderer(theRenderer);
 	theFontMgr->initFontLib();
 	theSoundMgr->initMixer();
+
+	// Players score
 	theScore = 0;
 
 	theAreaClicked = { 0, 0 };
+
+
 	// Store the sprite and background textures
 	textureName = { "Enemy", "bullet_clipart", "explosion", "Turret", "MainMenuBackground","GameOverBackground" };
 	texturesToUse = { "Images\\Sprites\\Enemy.png", "Images\\Sprites\\Bullet_ClipArt.png", "Images\\Sprites\\explosion.png", "Images\\Sprites\\Turret.png", "Images\\Bkg\\MainMenuBackground.png", "Images\\Bkg\\GameOverBackground.png" };
@@ -73,6 +77,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		newBtn->setSpriteDimensions(theTextureMgr->getTexture(btnNameList[bCount])->getTWidth(), theTextureMgr->getTexture(btnNameList[bCount])->getTHeight());
 		theButtonMgr->add(btnNameList[bCount], newBtn);
 	}
+
 	theGameState = gameState::menu;
 	theBtnType = btnTypes::exit;
 
@@ -203,7 +208,7 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	}
 	break;
 
-	// Renders PLaying game state
+	// Renders Playing game state
 	case gameState::playing:
 	{
 		// Render the Background
@@ -342,6 +347,7 @@ void cGame::update(double deltaTime)
 		theScore = 0;
 		strScore = gameTextList[2];
 		strScore += to_string(theScore).c_str();
+		updateScore = true;
 	}
 
 	if (theGameState == gameState::end)

@@ -24,7 +24,7 @@ bool cHighScoreTable::loadFromFile(string highScoreFile)
 
 	file.open(highScoreFile, ios::binary);
 	if (!file.is_open())
-	{
+	{ 
 		cout << "Error opening file " << highScoreFile << endl;
 		return false;
 	}
@@ -50,7 +50,7 @@ bool cHighScoreTable::saveToFile(string highScoreFile)
 	file.open(highScoreFile, ios::binary | ios::out);
 
 	if (!file.is_open())
-	{
+	{ 
 		cout << "Error opening file " << highScoreFile << " for saving to ..." << endl;
 		return false;
 	}
@@ -88,7 +88,7 @@ int  cHighScoreTable::addItem(Item entry)
 cHighScoreTable::Item cHighScoreTable::getItem(int row)
 {
 	Item tblItem;
-	tblItem.Name = this->tableEntries[row]->Name;
+	tblItem.Name  = this->tableEntries[row]->Name;
 	tblItem.score = this->tableEntries[row]->score;
 	return tblItem;
 }

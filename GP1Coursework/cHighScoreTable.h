@@ -11,7 +11,7 @@ private:
 		string Name;
 		int score;
 
-		bool operator < (const Item& rhs) const
+		bool operator < ( const Item& rhs) const
 		{
 			return rhs.score < score;
 		}
@@ -42,3 +42,4 @@ public:
 
 	virtual ~cHighScoreTable();
 };
+

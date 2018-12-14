@@ -149,6 +149,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="cHighScoreTable.h" />
     <ClInclude Include="robotsGame.h" />
     <ClInclude Include="cRobot.h" />
     <ClInclude Include="cBkGround.h" />
@@ -158,7 +159,6 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cFontMgr.h" />
     <ClInclude Include="cGame.h" />
-    <ClInclude Include="cHighScoreTable.h" />
     <ClInclude Include="cTurret.h" />
     <ClInclude Include="cSDL2WNDManager.h" />
     <ClInclude Include="cSound.h" />
@@ -169,6 +169,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="GameConstants.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cHighScoreTable.cpp" />
     <ClCompile Include="RobotsSDL.cpp" />
     <ClCompile Include="cRobot.cpp" />
     <ClCompile Include="cBkGround.cpp" />
@@ -178,7 +179,6 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="cFont.cpp" />
     <ClCompile Include="cFontMgr.cpp" />
     <ClCompile Include="cGameStuVer.cpp" />
-    <ClCompile Include="cHighScoreTable.cpp" />
     <ClCompile Include="cTurret.cpp" />
     <ClCompile Include="cSDL2WNDManager.cpp" />
     <ClCompile Include="cSound.cpp" />
@@ -198,8 +198,6 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="Data\HighScore.dat" />
-    <None Include="Data\HighScore2.dat" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Audio\button_click.wav" />
